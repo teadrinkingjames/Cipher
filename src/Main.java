@@ -309,6 +309,6 @@ public class Main {
         System.out.println("WORD: 'SYZYGYsyzygy',               CODE: 'GGGggg',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "SYZYGYsyzygy",                "GGGggg",     true) + "\t\t\t " +"Decoded: " + ArrayShiftCaesarCipher("decode", "YyEeFfEeMmEe",               "GGGggg", true));
         System.out.println("WORD: 'Banana splits are delicious!'CODE: 'abc',        ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Banana splits are delicious!","abc",        true) +  "\t "    +"Decoded: " + ArrayShiftCaesarCipher("decode", "Bb lttdjq!aoui gedwnbrtb lju","abc",   true));
         System.out.println("WORD: 'Alphabet',                   CODE: 'ZwXy',       ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Alphabet",                    "ZwXy",       true) +  "\t\t\t "+"Decoded: " + ArrayShiftCaesarCipher("decode", "Zwkxoagp",                   "ZwXy",   true));
-        System.out.println("WORD: 'Glebe Collegiate Institute', CODE: 'Ottawa',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Glebe Collegiate Institute",  "Ottawa",     true) + "\t " +    "Decoded: " + ArrayShiftCaesarCipher("decode", "UVbnpzhtsasemtpexisx t zBu", "Ottawa", true));
+        System.out.println("WORD: 'Glebe Collegiate Institute', CODE: 'Ottawa',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Glebe Collegiate Institute",  "Ottawa",     true) + "\t " +    "Decoded: " + ArrayShiftCaesarCipher("decode", "UVbnpzhtsasemtpexisx t zBu", "Ottawa", true) + "\n");
     }
 }
