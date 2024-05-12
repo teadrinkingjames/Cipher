@@ -52,17 +52,17 @@ public class Main {
                 System.out.println("which kind of cipher do you want to use?" + "\n" + "1. Regular Caesar Cipher" + "\n" + "2. Caesar Cipher with codeword" + "\n" + "3. Caesar Cipher with array codeword" + "\n");
                 userInput = scanner.nextLine();
                 if (userInput.equals("1")) {
-                    System.out.println("The decoded text is: " + CaesarCipher(encodeOrDecode, text, codeword, "length", false));
+                    System.out.println("The decoded text is: " + CaesarCipher(encodeOrDecode, text, codeword, "length", true));
                     break;
                 } else if (userInput.equals("2")) {
-                    System.out.println("The decoded text is: " + MultiShiftCaesarCipher(encodeOrDecode, text, codeword, false));
+                    System.out.println("The decoded text is: " + MultiShiftCaesarCipher(encodeOrDecode, text, codeword, true));
                     break;
                 } else if (userInput.equals("3")) {
-                    System.out.println("The decoded text is: " + ArrayShiftCaesarCipher(encodeOrDecode, text, codeword, false));
+                    System.out.println("The decoded text is: " + ArrayShiftCaesarCipher(encodeOrDecode, text, codeword, true));
                     break;
                 
                 }
-            } else {
+            } else { // encodes and prints the encoded text using all three methods
                 System.out.println("Encoded text using regular caesar cipher: " +     CaesarCipher(encodeOrDecode, text, codeword, "length", true));
                 System.out.println("Encoded text using mulitShift caesar cipher: " +  MultiShiftCaesarCipher(encodeOrDecode, text, codeword, true));
                 System.out.println("Encoded text using array shift caesar cipher: " + ArrayShiftCaesarCipher(encodeOrDecode, text, codeword, true));
@@ -155,11 +155,9 @@ public class Main {
 
         // creates an array of strings of each letter of the textToAlter
         for (int i = 0; i < cipheredText.length(); i++) {
-            try {
-                cipheredTextArray[i] = String.valueOf(cipheredText.charAt(i));
-            } catch (ArrayIndexOutOfBoundsException ignorException) {}
+            cipheredTextArray[i] = String.valueOf(cipheredText.charAt(i));
         }
-        // creates an array of character of the codeword
+        // creates an array of characters of the codeword
         for (int i = 0; i < codeChars.length; i++) {
             codeChars[i] = codeword.charAt(i);
         }
@@ -181,7 +179,7 @@ public class Main {
             numberOfIterations = (cipheredText.length()/codeword.length())+1;
         }
         int workingCharacter = 0;
-        for (int j = 0; j < numberOfIterations; j++) {
+        for (int iterationsComplete = 0; iterationsComplete < numberOfIterations; iterationsComplete++) {
             for (int i = 0; i < codeChars.length; i++) {
                 try {
                     if (!STOPPRINTS) {
@@ -191,12 +189,7 @@ public class Main {
                         alteredText += CaesarCipher(encodeOrDecode, cipheredTextArray[workingCharacter], String.valueOf(codeChars[i]), "value", STOPPRINTS);
                         workingCharacter++;
                     }
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    //System.out.println("ArrayIndexOutOfBoundsException: " + e); // lots of these exceptions are thrown, but they are ignored
-                }
-                // if (!cipheredTextArray[workingCharacter].contains("*")){
-                //     workingCharacter++;
-                // }
+                } catch (ArrayIndexOutOfBoundsException ignorException) {} // ignores the exception if the workingCharacter is out of bounds
             }
         }
         return alteredText;
@@ -210,9 +203,11 @@ public class Main {
                 textToAlter += "*";
             }
         }
-        System.out.println(textToAlter + "|end");
-        System.out.println("++++++++++++++++++++++++++++++");
-
+        if (!STOPPRINTS) {
+            System.out.println(textToAlter + "|end");
+            System.out.println("++++++++++++++++++++++++++++++");
+        }
+        // following vars MUST be below the padding code above to insure the proper length of the textToAlter is used
         final int LENGTH_OF_CODEWORD = codeword.length();
         final int LENGTH_OF_WORD = textToAlter.length();
         final int LENGTH_OF_SPLITS = LENGTH_OF_WORD/LENGTH_OF_CODEWORD;
@@ -244,7 +239,6 @@ public class Main {
             }
             return cipheredText; 
         } else { // +++++++++++++++++ decoding cipher code +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            
             // spilts the textToAlter into the same amount of strings as the codeword
             String[] splitStrings = new String[LENGTH_OF_CODEWORD];
             int workingCharacter = 0;
@@ -256,12 +250,10 @@ public class Main {
                         splitStrings[SpiltIndex] += textToAlter.charAt(workingCharacter-1);
                     }
                 }
-            } else {
+            } else { // if there are padding characters, the padding characters are added to the end of the strings in the splitStrings array
                 for (int SpiltIndex = 0; SpiltIndex < splitStrings.length; SpiltIndex++) {
                     splitStrings[SpiltIndex] = "";
                     for (int letterIndex = 0; letterIndex < LENGTH_OF_SPLITS; letterIndex++) {
-                        if (textToAlter.charAt(workingCharacter) == '*') {
-                        }
                         if (letterIndex == LENGTH_OF_SPLITS-1 && SpiltIndex + paddingCharacters > splitStrings.length-1) {
                             splitStrings[SpiltIndex] += "*";
                         } else {
@@ -271,27 +263,20 @@ public class Main {
                     }
                 }
             }
-            // // this replaces the padding characters with null
-            // for (int i = 0; i < LENGTH_OF_CODEWORD; i++) {
-            //     for (int j = 0; j < LENGTH_OF_SPLITS; j++) {
-            //         if (splitStrings[i].charAt(j) == ' ') {
-            //             //splitStrings[i] = splitStrings[i].replace("*", "");
-            //         }
-            //     }
-            // }
-            // TEST prints of the spilts before decoding
-            for (int i = 0; i < splitStrings.length; i++) {
-                System.out.println(splitStrings[i]);
-                
+            if (!STOPPRINTS) {  // TEST prints of the spilts before decoding
+                for (int i = 0; i < splitStrings.length; i++) {
+                    System.out.println(splitStrings[i]);
+                } 
             }
             // use the decode function of the MultiShiftCaesarCipher method to decode the strings in the splitStrings array
             for (int i = 0; i < splitStrings.length; i++) {
                 splitStrings[i] = MultiShiftCaesarCipher(encodeOrDecode, splitStrings[i], codeword, STOPPRINTS);
             }
-            // TEST print of spilts after decoding
-            System.out.println("++++++++++++++++++++++++++++++");
-            for (int i = 0; i < splitStrings.length; i++) {
-                System.out.println(splitStrings[i].length() + "\t" + splitStrings[i]);
+            if (!STOPPRINTS) {  // TEST print of spilts after decoding
+                System.out.println("++++++++++++++++++++++++++++++");
+                for (int i = 0; i < splitStrings.length; i++) {
+                    System.out.println(splitStrings[i].length() + "\t" + splitStrings[i]);
+                } 
             }
             // rebuild the uncipheredText using the splitStrings array
             String uncipheredText = "";
@@ -321,9 +306,9 @@ public class Main {
         System.out.println("WORD: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', CODE: 'alpha',      ||\tEncoded: "+ MultiShiftCaesarCipher("encode", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "alpha",      true) + " \t "     +"Decoded: " + MultiShiftCaesarCipher("decode", "AMRKEFRWPJKWBUOPBGZTUGLEYZ", "alpha",      true));
         System.out.println("WORD: 'I am 16y/o',                 CODE: 'no I'm not', ||\tEncoded: "+ MultiShiftCaesarCipher("encode", "I am 16y/o",                 "no I'm not", true) + " \t\t\t " +"Decoded: " + MultiShiftCaesarCipher("decode", "V gu 16l/h",                 "no I'm not", true) + "\n");    
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++ TESTS for array shift caesar cipher ++++++++++++++++++++++++++++++++++++++++++++++++++" );
-        System.out.println("WORD: 'SYZYGYsyzygy',               CODE: 'GGGggg',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "SYZYGYsyzygy",                "GGGggg",     true) + "\t\t\t " +"Decoded: " + ArrayShiftCaesarCipher("decode", "YyEeFfEeMmEe",               "GGGggg", true) + "\n++++++++++++++++++++++++++++++");
-        System.out.println("WORD: 'Banana splits are delicious!'CODE: 'abc',        ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Banana splits are delicious!","abc",        true) +  "\t "    +"Decoded: " + ArrayShiftCaesarCipher("decode", "Bb lttdjq!aoui gedwnbrtb lju","abc",   true) + "\n++++++++++++++++++++++++++++++");
-        System.out.println("WORD: 'Alphabet',                   CODE: 'ZwXy',       ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Alphabet",                    "ZwXy",       true) +  "\t\t\t "+"Decoded: " + ArrayShiftCaesarCipher("decode", "Zwkxoagp",                   "ZwXy",   true) + "\n++++++++++++++++++++++++++++++");
-        System.out.println("WORD: 'Glebe Collegiate Institute', CODE: 'Ottawa',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Glebe Collegiate Institute",  "Ottawa",     true) + "\t " +    "Decoded: " + ArrayShiftCaesarCipher("decode", "UVbnpzhtsasemtpexisx t zBu", "Ottawa", true) + "\n++++++++++++++++++++++++++++++");
+        System.out.println("WORD: 'SYZYGYsyzygy',               CODE: 'GGGggg',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "SYZYGYsyzygy",                "GGGggg",     true) + "\t\t\t " +"Decoded: " + ArrayShiftCaesarCipher("decode", "YyEeFfEeMmEe",               "GGGggg", true));
+        System.out.println("WORD: 'Banana splits are delicious!'CODE: 'abc',        ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Banana splits are delicious!","abc",        true) +  "\t "    +"Decoded: " + ArrayShiftCaesarCipher("decode", "Bb lttdjq!aoui gedwnbrtb lju","abc",   true));
+        System.out.println("WORD: 'Alphabet',                   CODE: 'ZwXy',       ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Alphabet",                    "ZwXy",       true) +  "\t\t\t "+"Decoded: " + ArrayShiftCaesarCipher("decode", "Zwkxoagp",                   "ZwXy",   true));
+        System.out.println("WORD: 'Glebe Collegiate Institute', CODE: 'Ottawa',     ||\tEncoded: "+ ArrayShiftCaesarCipher("encode", "Glebe Collegiate Institute",  "Ottawa",     true) + "\t " +    "Decoded: " + ArrayShiftCaesarCipher("decode", "UVbnpzhtsasemtpexisx t zBu", "Ottawa", true));
     }
 }
