@@ -8,6 +8,7 @@
 // 2024/05/09 - Finished method 2 code                                                                                                    #
 // 2024/05/12 - finished method 3 code                                                                                                    #
 // 2024/05/13 - cleaned up code, finished comments                                                                                        #
+// 2024/05/15 - Handed in                                                                                                                 #
 //#########################################################################################################################################
 
 import java.util.Scanner;
@@ -36,19 +37,24 @@ public class Main {
             }
         }
         String text = "";
-        System.out.print("Enter the text you want to encode/decode: ");
-        String userInput = scanner.nextLine();
-        text = userInput;
+        while (true) {
+            System.out.print("Enter the text you want to encode/decode: ");
+            String userInput = scanner.nextLine();
+            if (!userInput.equalsIgnoreCase("")) {
+                text = userInput;
+                break;
+            }
+        }
     
         String codeword = "";
         while (true) { // gets the codeword from the user
             System.out.print("Enter the codeword: ");
-            userInput = scanner.nextLine(); 
+            String userInput = scanner.nextLine(); 
             if (userInput.length() > NUMBER_OF_LETTERS_IN_ALPHABET-1) {
                 System.out.println("The codeword is too long, please enter a codeword shorter than 26 characters");
                 continue;
             }
-            if (userInput.matches("[a-z,A-Z]*")) {
+            if (userInput.matches("[a-z,A-Z]*") && !userInput.equalsIgnoreCase("")) {
                 codeword = userInput.toLowerCase();
                 break;
             }
@@ -56,7 +62,7 @@ public class Main {
         while (true) { // asks the user which method they want to use
             if (encodeOrDecode.equalsIgnoreCase("decode")) {
                 System.out.println("which kind of cipher do you want to use?" + "\n" + "1. Regular Caesar Cipher" + "\n" + "2. Caesar Cipher with codeword" + "\n" + "3. Caesar Cipher with array codeword" + "\n");
-                userInput = scanner.nextLine();
+                String userInput = scanner.nextLine();
                 if (userInput.equals("1")) {
                     System.out.println("The decoded text is: " + CaesarCipher(encodeOrDecode, text, codeword, "length", true));
                     break;
@@ -302,7 +308,7 @@ public class Main {
             return uncipheredText; 
         }
     }
-    // Test cases for all three methods
+    // Test cases for all three methods seen on google classroom
     public static void testCases() {
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++ TESTS for REGULAR caesar cipher ++++++++++++++++++++++++++++++++++++++++++++++++++" );
         System.out.println("WORD: 'james',                      CODE: 'james',      length ||\tEncoded: "   + CaesarCipher("encode", "james",                      "james",      "length", true) + "   \t\t\t "+"Decoded: " + CaesarCipher("decode", "ofrjx",                      "james",      "length", true));
